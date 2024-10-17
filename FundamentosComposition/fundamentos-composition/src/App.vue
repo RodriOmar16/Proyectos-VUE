@@ -1,17 +1,18 @@
 <template>
-  <button class="btn btn-success" @click="inc()" >Incrementar</button>
-  <button class="btn btn-danger" @click="dec()" >Decrementar</button>
-  <button class="btn btn-primary" @click="reset()" >Resetear</button>
-  <button class="btn btn-secondary" @click="agregarFav()" :disabled="controlarLista"> Favorito </button>
-  
-  <h1 :style="'color: '+ (counter > 0 ? 'green;' : (counter < 0 ? 'red;' : 'black;'))">
-    {{ counter }}
-  </h1>
+  <div class="container text-center mt-3">
+    <button class="btn btn-success" @click="inc()" >Incrementar</button>
+    <button class="btn btn-danger" @click="dec()" >Decrementar</button>
+    <button class="btn btn-primary" @click="reset()" >Resetear</button>
+    <button class="btn btn-secondary" @click="agregarFav()" :disabled="controlarLista"> Favorito </button>
+    
+    <h1 :style="'color: '+ (counter > 0 ? 'green;' : (counter < 0 ? 'red;' : 'black;'))">
+      {{ counter }}
+    </h1>
 
-  <ul>
-    <li v-for="item in array">{{ item }}</li>
-  </ul>
-
+    <ul class="list-group">
+      <li class="list-group-item" v-for="item in array">{{ item }}</li>
+    </ul>
+  </div>
 </template>
 
 <script setup>
