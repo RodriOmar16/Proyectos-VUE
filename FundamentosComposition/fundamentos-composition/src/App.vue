@@ -1,26 +1,22 @@
 <template>
-  <button @click="inc()" >Incrementar</button>
-  <button @click="dec()" >Decrementar</button>
-  <button @click="reset()" >Resetear</button>
-  <button 
-    @click="agregarFav()" 
-    :disabled="array.indexOf(counter) != -1"
-  >
-    Favorito
-  </button>
+  <button class="btn btn-success" @click="inc()" >Incrementar</button>
+  <button class="btn btn-danger" @click="dec()" >Decrementar</button>
+  <button class="btn btn-primary" @click="reset()" >Resetear</button>
+  <button class="btn btn-secondary" @click="agregarFav()" :disabled="controlarLista"> Favorito </button>
+  
   <h1 :style="'color: '+ (counter > 0 ? 'green;' : (counter < 0 ? 'red;' : 'black;'))">
     {{ counter }}
   </h1>
 
-  <ul v-for="item in array">
-    <li>{{ item }}</li>
+  <ul>
+    <li v-for="item in array">{{ item }}</li>
   </ul>
 
 </template>
 
 <script setup>
   //imports
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   
   //Data
   let counter = ref(0);
@@ -35,6 +31,10 @@
     array.value.push(counter.value);
   }
 
+  //computed
+  const controlarLista = computed(() => {
+    return array.value.indexOf(counter.value) != -1
+  });
 
 </script>
 
