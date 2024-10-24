@@ -1,0 +1,9 @@
+1 - ejecutar npm create vue@latest
+2 - marcar las opciones requeridas para el projecto y darle nombre
+-----
+1 - instalar Vue CLI: npm install -g @vue/cli
+2 - crea una nuevo proyecto: vue create nombre-del-proyecto
+3 - Durante el proceso de creación, te preguntará qué preset deseas usar. Elige "Manually select features"
+4 - escojer las caracteristicas del proyecto
+5 - elegir la version 2
+6 - cd a la carpeta, npm run serve o dev
