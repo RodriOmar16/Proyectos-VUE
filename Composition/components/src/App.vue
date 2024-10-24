@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container m-2">
     <h1>
       {{ counter }}
     </h1>
@@ -8,28 +8,41 @@
       @actualizar="inc"
     />
     <hr>
-    <BlogPost
-      title="Post 1"
-    />
-    <BlogPost
-      title="Post 2"
-    />
-    <BlogPost
-      title="Post 3"
-    />
+
+    <h1 v-if="favorito">Mi componente Favorito es: {{ favorito }}</h1>
+    <div v-for="postItem in post">
+      <BlogPost
+        :title="postItem.title"
+        :body="postItem.body"
+        :colorBg="postItem.colorBg"
+        @cambiarFavorito="cambiarFavorito"
+      />
+    </div>
 
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import ButtonCounter from './components/ButtonCounter.vue';
-import BlogPost from './components/BlogPost.vue';
+  import { ref } from 'vue';
+  import ButtonCounter from './components/ButtonCounter.vue';
+  import BlogPost from './components/BlogPost.vue';
 
-const counter = ref(0);
+  //data
+  const counter = ref(0);
+  const post = ref([
+    { title: 'Post 1', body: 'Hola mundo', colorBg: 'danger' },
+    { title: 'Post 2', colorBg: 'primary' },
+    { title: 'Post 3', body: 'Otro text', colorBg: 'success' },
+  ]);
+  const favorito = ref('');
 
-const inc = (valor) => {
-  counter.value = valor;
-}
+  //methods
+  const inc = (valor) => {
+    counter.value = valor;
+  }
+  const cambiarFavorito = (post) =>{
+    favorito.value = post
+  }
+  //computed
 
 </script>

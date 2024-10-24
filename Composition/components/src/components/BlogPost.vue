@@ -1,12 +1,39 @@
 <template>
-  <div class="card">
+  <div class="card" :class="`bg-${props.colorBg}`" @click="controlandoFavorito(props.title)">
     <div class="card-body">
-      <h5 class="card-title">{{ title }}</h5>
-      <p>Lorem ipsum dolor, sit amet </p>
+      <h5 class="card-title">{{ props.title }}</h5>
+      <p>{{ props.body }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-  defineProps(['title']);
+  //props
+  const props = defineProps({
+    title: {
+      type:String,
+      default: ''
+    },
+    body: {
+      type:String,
+      default: 'Lorem ipsum dolor, sit amet'
+    },
+    colorBg:{
+      type:String,
+      default: 'info'
+    }
+  });
+  
+  //emits
+  const emit = defineEmits(['cambiarFavorito']);
+  
+  //data
+
+  //methods
+  const controlandoFavorito = (post) => {
+    emit('cambiarFavorito', post)
+  };
+
+  //computed
+
 </script>

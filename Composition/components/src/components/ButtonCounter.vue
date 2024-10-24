@@ -1,19 +1,28 @@
 <template>
-  <button @click="inc">+</button>
+  <button class="btn btn-primary" @click="inc">+</button>
 </template>
 
 <script setup>
 
-// Recibimos la prop 'counterDato' desde el componente padre
-defineProps(['counterDato']);
+  // props
+  const props = defineProps({
+    counterDato: {
+      type: Number,
+      required: true
+    },
+    datos:{
+      type: Boolean,
+      default: false
+    }
+  });
 
-// Definimos el evento personalizado 'actualizar' que emitiremos
-const emit = defineEmits(['actualizar']);
+  // emit
+  const emit = defineEmits(['actualizar']);
 
-// Función para incrementar el contador
-const inc = () => {
-  console.log("counterDato: ", counterDato.value);
-  const nuevoValor = counterDato + 1;
-  emit('actualizar', nuevoValor); // Emitimos el nuevo valor al padre
-};
+  // data
+
+  // methods
+  const inc = () => {
+    emit('actualizar', props.counterDato + 1); // Emitimos el nuevo valor al padre
+  };
 </script>
