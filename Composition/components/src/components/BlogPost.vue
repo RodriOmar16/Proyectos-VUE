@@ -1,7 +1,7 @@
 <template>
   <div class="card" :class="`bg-${props.colorBg}`" @click="controlandoFavorito(props.title)">
     <div class="card-body">
-      <h5 class="card-title">{{ props.title }}</h5>
+      <h5 class="card-title">{{ props.id }} - {{ props.title }}</h5>
       <p>{{ props.body }}</p>
     </div>
   </div>
@@ -10,6 +10,9 @@
 <script setup>
   //props
   const props = defineProps({
+    id:{
+      type: Number
+    },  
     title: {
       type:String,
       default: ''
