@@ -7,3 +7,6 @@
 4 - escojer las caracteristicas del proyecto
 5 - elegir la version 2
 6 - cd a la carpeta, npm run serve o dev
+-----------------
+webmaster
+mx@dqs8R3DC^srHiuz
