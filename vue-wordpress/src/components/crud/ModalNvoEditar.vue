@@ -14,9 +14,10 @@
       <v-divider class="ma-0" :thickness="2"></v-divider>
       <v-card-text>
         <v-row>
-          <v-col cols="12" sm="6" md="4" >
+          <v-col cols="12" sm="6" md="4" class="py-1">
             Título
             <v-text-field
+              class="mt-2"
               v-model="filtro.title"
               hide-details
               outlined
@@ -24,21 +25,14 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="4" >
+          <v-col cols="12" sm="6" md="4" class="py-1">
             Fecha
-            <v-text-field
-              v-model="filtro.date"
-              hide-details
-              outlined
-              dense
-              clearable
-            ></v-text-field>
-            <v-date-picker width="400" v-model="fecha"></v-date-picker>
-            {{ fecha }}
+            <FechaPicker v-model="filtro.date"/>
           </v-col>
-          <v-col cols="12" sm="6" md="4" >
+          <v-col cols="12" sm="6" md="4" class="py-1">
             Estado
             <v-text-field
+              class="mt-2"
               v-model="filtro.status"
               hide-details
               outlined
@@ -46,9 +40,10 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="py-1">
             Contenido
             <v-textarea
+              class="mt-2"
               v-model="filtro.content"
               hide-details
               outlined
@@ -63,6 +58,8 @@
 </template>
 
 <script>
+import FechaPicker from '../FechaPicker.vue';
+
 export default {
   name: 'ModalNvoEditar',
   props:{
@@ -101,8 +98,11 @@ export default {
   },
   methods:{
     async init(){
-      console.log("datos: ", this.datos);
+      //console.log("datos: ", this.datos);
     }
+  },
+  components:{
+    FechaPicker
   },
   watch:{
     activo: function(val){
@@ -114,6 +114,13 @@ export default {
           this.filtro.status  = this.datos.item.status;
         }
         this.init();
+      }else{
+        this.filtro = {
+          title: null,
+          content: null,
+          date: null,
+          status: null
+        }
       }
     }
   }
