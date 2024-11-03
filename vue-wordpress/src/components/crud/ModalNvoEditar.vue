@@ -59,6 +59,7 @@
 
 <script>
 import FechaPicker from '../FechaPicker.vue';
+import moment from 'moment';
 
 export default {
   name: 'ModalNvoEditar',
@@ -97,9 +98,10 @@ export default {
     }
   },
   methods:{
-    async init(){
+    //async init(){
       //console.log("datos: ", this.datos);
-    }
+    //}
+    
   },
   components:{
     FechaPicker
@@ -110,10 +112,10 @@ export default {
         if(this.datos.item.id){
           this.filtro.title   = this.datos.item.title;
           this.filtro.content = this.datos.item.content;
-          this.filtro.date    = this.datos.item.date;
+          this.filtro.date    = this.datos.item.date;//this.aplicarFormato();
           this.filtro.status  = this.datos.item.status;
         }
-        this.init();
+        //this.init();
       }else{
         this.filtro = {
           title: null,

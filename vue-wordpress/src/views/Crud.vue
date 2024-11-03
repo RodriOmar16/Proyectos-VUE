@@ -39,7 +39,6 @@
               <v-icon small>fa-solid fa-trash</v-icon>
             </v-btn>
           </template>
-
         </v-data-table>
       </v-col>
     </v-row>
@@ -112,7 +111,15 @@ export default{
       if(item){
         this.objModal.item = item;
         this.objModal.nuevo = false;
-      }else this.objModal.nuevo = true;
+      }else{
+        this.objModal.item = {
+          title: null,
+          content: null,
+          date: null,
+          status: null
+        }
+        this.objModal.nuevo = true;
+      }
       this.objModal.activo = true;
     },
     async eliminarPost(item){

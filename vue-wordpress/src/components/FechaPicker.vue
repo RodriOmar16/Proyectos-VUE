@@ -66,6 +66,9 @@ export default {
       date: null
     }
   },
+  created(){
+    this.aplicarFormato();
+  }, 
   methods:{
     formatearFecha(){
       if(this.date){
@@ -73,14 +76,30 @@ export default {
         dia++;
         this.fecha = moment(new Date(`${anio}-${mes}-${dia}`)).format('DD/MM/YYYY');
       }
+    },
+    aplicarFormato(){
+      this.date = moment(new Date(this.fecha)).format('YYYY-MM-DD');
     }
   },
   watch:{
+    menu: function(val){
+      if(val){
+        console.log("date / fecha: ", this.date , this.fecha)
+        if(this.fecha){
+          this.date = this.fecha
+        }
+      }
+    },
     date: function(val){
       if(!val){
         this.fecha = null;
       }
     },
+    fecha: function(val){
+      if(!val){
+        this.date = null;
+      }
+    }
   }
 }
 
