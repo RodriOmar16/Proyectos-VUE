@@ -1,7 +1,7 @@
 <template>
   <v-dialog 
     v-model="activo"
-    width="800"
+    width="700"
   >
     <v-card :loading="load">
       <v-card-title class="">
@@ -14,7 +14,7 @@
       <v-divider class="ma-0" :thickness="2"></v-divider>
       <v-card-text>
         <v-row>
-          <v-col cols="12" sm="6" md="4" class="py-1">
+          <v-col cols="12" sm="6" md="12" class="py-1">
             Título
             <v-text-field
               class="mt-2"
@@ -25,7 +25,7 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="4" class="py-1">
+          <!--<v-col cols="12" sm="6" md="4" class="py-1">
             Fecha
             <FechaPicker v-model="filtro.date"/>
           </v-col>
@@ -39,7 +39,7 @@
               dense
               clearable
             ></v-text-field>
-          </v-col>
+          </v-col>-->
           <v-col cols="12" class="py-1">
             Contenido
             <v-textarea
@@ -53,13 +53,26 @@
           </v-col>
         </v-row>
       </v-card-text>
+      <v-card-actions class="d-flex justify-end">
+        <v-btn color="secondary" @click="activo = false">Cancelar</v-btn>
+        <v-btn color="success" @click="guardar()">
+          <v-icon class="me-2">fa-solid fa-floppy-disk</v-icon>
+          {{ nuevo ? 'Grabar' : 'Guardar' }}
+        </v-btn>
+      </v-card-actions>
     </v-card>
+    <SnackBar
+      v-model="objSnackbar.activo"
+      :datos="objSnackbar"
+    />
   </v-dialog>
 </template>
 
 <script>
-import FechaPicker from '../FechaPicker.vue';
+import FechaPicker from '../generales/FechaPicker.vue';
 import moment from 'moment';
+import SnackBar from '../generales/SnackBar.vue';
+import axios from 'axios';
 
 export default {
   name: 'ModalNvoEditar',
@@ -95,34 +108,66 @@ export default {
         status: null
       },
       fecha: '',
+      objSnackbar:{
+        activo: false,
+        mensaje: '',
+        color: ''
+      }
     }
   },
   methods:{
-    //async init(){
-      //console.log("datos: ", this.datos);
-    //}
-    
+    async guardar(){
+      if(!this.filtro.title){
+        this.objSnackbar.mensaje = 'Es necesario ingresar un titulo.'
+        this.objSnackbar.color   = 'red';
+        this.objSnackbar.activo = true;
+        return 
+      }
+      if(!this.filtro.content){
+        this.objSnackbar.mensaje = 'Es necesario ingresar un Contenido.'
+        this.objSnackbar.color   = 'red';
+        this.objSnackbar.activo = true;
+        return 
+      }
+      this.load = true;
+      if(this.nuevo){
+        try {
+          let obj = {
+            title:   this.filtro.title,
+            content: this.filtro.content,
+            status:  'publish'
+          }
+          const res = await this.axios.post('wp/v2/posts',obj,{
+            headers:{
+              'Authorization': 'Bearer'+this.$store.state.token
+            }
+          })
+          //console.log("res: ", res.data)
+          this.objSnackbar.mensaje = 'El post se grabó con exito'
+          this.objSnackbar.color   = 'green';
+          this.objSnackbar.activo = true;
+
+          this.$emit('actualizar', res.data)
+        } catch (error) {
+          this.objSnackbar.mensaje = 'Ocurrió un error al intentar grabar el post: '+error
+          this.objSnackbar.color   = 'red';
+          this.objSnackbar.activo = true;
+          return
+        }
+
+      }this.load = false;
+    }
   },
   components:{
-    FechaPicker
+    FechaPicker, SnackBar
   },
   watch:{
     activo: function(val){
       if(val){
-        if(this.datos.item.id){
-          this.filtro.title   = this.datos.item.title;
-          this.filtro.content = this.datos.item.content;
-          this.filtro.date    = this.datos.item.date;//this.aplicarFormato();
-          this.filtro.status  = this.datos.item.status;
-        }
-        //this.init();
-      }else{
-        this.filtro = {
-          title: null,
-          content: null,
-          date: null,
-          status: null
-        }
+        this.filtro.title   = this.datos.item.title;
+        this.filtro.content = this.datos.item.content;
+        this.filtro.date    = moment(new Date(this.datos.item.date)).format('DD/MM/YYYY');
+        this.filtro.status  = this.datos.item.status;
       }
     }
   }

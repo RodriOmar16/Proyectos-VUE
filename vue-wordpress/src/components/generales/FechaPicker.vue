@@ -62,8 +62,9 @@ export default {
   },
   data(){
     return {
+      moment: moment,
       menu: false,
-      date: null
+      date: moment(new Date()).format('YYYY-MM-DD')
     }
   },
   created(){
@@ -71,35 +72,30 @@ export default {
   }, 
   methods:{
     formatearFecha(){
-      if(this.date){
-        let [anio, mes, dia] = this.date.split('-');
-        dia++;
-        this.fecha = moment(new Date(`${anio}-${mes}-${dia}`)).format('DD/MM/YYYY');
-      }
     },
     aplicarFormato(){
-      this.date = moment(new Date(this.fecha)).format('YYYY-MM-DD');
+      if(this.fecha){
+        let fechaArr = this.fecha.split('/')
+        this.date = moment(new Date(fechaArr[2], fechaArr[1]-1, fechaArr[0])).format('YYYY-MM-DD')
+      }else{
+        this.fecha = moment(new Date()).format('DD/MM/YYYY');
+      }
     }
   },
   watch:{
     menu: function(val){
       if(val){
-        console.log("date / fecha: ", this.date , this.fecha)
-        if(this.fecha){
-          this.date = this.fecha
-        }
+        this.aplicarFormato();
       }
     },
     date: function(val){
       if(!val){
         this.fecha = null;
+      }else {
+        let dateArr = val.split('-');
+        this.fecha = moment(new Date(dateArr[0], dateArr[1]-1, dateArr[2])).format('DD/MM/YYYY');
       }
     },
-    fecha: function(val){
-      if(!val){
-        this.date = null;
-      }
-    }
   }
 }
 

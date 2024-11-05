@@ -45,6 +45,7 @@
     <ModalNvoEditar
       v-model="objModal.activo"
       :datos="objModal"
+      @actualizar="controlarItem"
     />
   </div>
 </template>
@@ -78,7 +79,7 @@ export default{
           date: null,
           status: null
         }
-      }
+      },
     }
   },
   created(){
@@ -102,6 +103,20 @@ export default{
           }
           this.entradas.push(item);
         });
+        if(!this.$store.state.token){
+          let datos = {
+              "username": "webmaster",
+              "password":  "mx@dqs8R3DC^srHiuz"
+          }
+          const resp = await fetch('http://localhost:80/vue-wordpress/wp-json/jwt-auth/v1/token',{
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+          })
+          this.$store.dispatch('setTokenAction', await resp.json());
+        }
         this.load = false;
       } catch (error) {
         console.log(error);
@@ -115,12 +130,33 @@ export default{
         this.objModal.item = {
           title: null,
           content: null,
-          date: null,
+          date: new Date(),
           status: null
         }
         this.objModal.nuevo = true;
       }
       this.objModal.activo = true;
+    },
+    controlarItem(item){
+      this.objModal.activo = false;
+      let pos = this.entradas.indexOf(item)
+      if(pos == -1){
+        this.entradas.push({
+          id:      item.id,
+          title:   item.title.rendered,
+          content: this.limpiaEntrada(item.content.rendered),
+          date:    item.date,
+          status:  item.status,
+        })
+      }else{
+        this.entradas[pos] = {
+          id:      item.id,
+          title:   item.title.rendered,
+          content: this.limpiaEntrada(item.content.rendered),
+          date:    item.date,
+          status:  item.status,
+        }
+      }
     },
     async eliminarPost(item){
       console.log("item borrar: ", item)
