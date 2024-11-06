@@ -130,32 +130,44 @@ export default {
         return 
       }
       this.load = true;
-      if(this.nuevo){
-        try {
-          let obj = {
-            title:   this.filtro.title,
-            content: this.filtro.content,
-            status:  'publish'
-          }
-          const res = await this.axios.post('wp/v2/posts',obj,{
+      let obj = {
+        title:   this.filtro.title,
+        content: this.filtro.content,
+        status:  'publish'
+      }
+      try {
+        let texto  = '';
+        let res;
+        if(this.nuevo){
+          res = await this.axios.post('wp/v2/posts',obj,{
             headers:{
               'Authorization': 'Bearer'+this.$store.state.token
             }
-          })
-          //console.log("res: ", res.data)
-          this.objSnackbar.mensaje = 'El post se grabó con exito'
-          this.objSnackbar.color   = 'green';
-          this.objSnackbar.activo = true;
-
-          this.$emit('actualizar', res.data)
-        } catch (error) {
-          this.objSnackbar.mensaje = 'Ocurrió un error al intentar grabar el post: '+error
-          this.objSnackbar.color   = 'red';
-          this.objSnackbar.activo = true;
-          return
+          });
+          texto  = 'El post se grabó con exito';
+        }else{
+          res = await this.axios.post(`wp/v2/posts/${this.datos.item.id}`,obj,{
+            headers:{
+              'Authorization': 'Bearer'+this.$store.state.token
+            }
+          });
+          texto  = 'El post se editó con exito';
         }
 
-      }this.load = false;
+        this.objSnackbar.mensaje = texto
+        this.objSnackbar.color   = 'green';
+        this.objSnackbar.activo = true;
+
+        this.$emit('actualizar', res.data)
+
+      } catch (error) {
+        this.objSnackbar.mensaje = `Ocurrió un error al intentar ${this.nuevo ? 'grabar' : 'editar'} el post: `+error
+        this.objSnackbar.color   = 'red';
+        this.objSnackbar.activo = true;
+        return
+      }
+      
+      this.load = false;
     }
   },
   components:{

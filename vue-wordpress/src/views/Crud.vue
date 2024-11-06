@@ -139,7 +139,7 @@ export default{
     },
     controlarItem(item){
       this.objModal.activo = false;
-      let pos = this.entradas.indexOf(item)
+      let pos = this.entradas.map(e=>e.id).indexOf(item.id)
       if(pos == -1){
         this.entradas.push({
           id:      item.id,
@@ -149,13 +149,8 @@ export default{
           status:  item.status,
         })
       }else{
-        this.entradas[pos] = {
-          id:      item.id,
-          title:   item.title.rendered,
-          content: this.limpiaEntrada(item.content.rendered),
-          date:    item.date,
-          status:  item.status,
-        }
+        this.entradas[pos].title   = item.title.rendered;
+        this.entradas[pos].content = this.limpiaEntrada(item.content.rendered);
       }
     },
     async eliminarPost(item){
