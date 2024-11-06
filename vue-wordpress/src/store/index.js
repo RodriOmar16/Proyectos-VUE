@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     token: '',
     objSnackBar:{
-      text:   '',
+      mensaje:   '',
       color:  '',
       activo: false
     }
@@ -19,7 +19,9 @@ export default new Vuex.Store({
       state.token = payload.token
     },
     setSnackBar(state, payload){
-      state.objSnackBar = payload
+      state.objSnackBar.mensaje= payload.mensaje
+      state.objSnackBar.color  = payload.color
+      state.objSnackBar.activo = payload.activo
     }
   },
   actions: {

@@ -61,17 +61,12 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <SnackBar
-      v-model="objSnackbar.activo"
-      :datos="objSnackbar"
-    />
   </v-dialog>
 </template>
 
 <script>
 import FechaPicker from '../generales/FechaPicker.vue';
 import moment from 'moment';
-import SnackBar from '../generales/SnackBar.vue';
 import axios from 'axios';
 
 export default {
@@ -108,25 +103,20 @@ export default {
         status: null
       },
       fecha: '',
-      objSnackbar:{
-        activo: false,
-        mensaje: '',
-        color: ''
-      }
     }
   },
   methods:{
     async guardar(){
       if(!this.filtro.title){
-        this.objSnackbar.mensaje = 'Es necesario ingresar un titulo.'
-        this.objSnackbar.color   = 'red';
-        this.objSnackbar.activo = true;
+        this.$store.state.objSnackBar.mensaje = 'Es necesario ingresar un titulo.'
+        this.$store.state.objSnackBar.color   = 'red';
+        this.$store.state.objSnackBar.activo = true;
         return 
       }
       if(!this.filtro.content){
-        this.objSnackbar.mensaje = 'Es necesario ingresar un Contenido.'
-        this.objSnackbar.color   = 'red';
-        this.objSnackbar.activo = true;
+        this.$store.state.objSnackBar.mensaje = 'Es necesario ingresar un Contenido.'
+        this.$store.state.objSnackBar.color   = 'red';
+        this.$store.state.objSnackBar.activo = true;
         return 
       }
       this.load = true;
@@ -154,16 +144,16 @@ export default {
           texto  = 'El post se editó con exito';
         }
 
-        this.objSnackbar.mensaje = texto
-        this.objSnackbar.color   = 'green';
-        this.objSnackbar.activo = true;
+        this.$store.state.objSnackBar.mensaje = texto
+        this.$store.state.objSnackBar.color   = 'green';
+        this.$store.state.objSnackBar.activo = true;
 
         this.$emit('actualizar', res.data)
 
       } catch (error) {
-        this.objSnackbar.mensaje = `Ocurrió un error al intentar ${this.nuevo ? 'grabar' : 'editar'} el post: `+error
-        this.objSnackbar.color   = 'red';
-        this.objSnackbar.activo = true;
+        this.$store.state.objSnackBar.mensaje = `Ocurrió un error al intentar ${this.nuevo ? 'grabar' : 'editar'} el post: `+error
+        this.$store.state.objSnackBar.color   = 'red';
+        this.$store.state.objSnackBar.activo = true;
         return
       }
       
@@ -171,7 +161,7 @@ export default {
     }
   },
   components:{
-    FechaPicker, SnackBar
+    FechaPicker
   },
   watch:{
     activo: function(val){

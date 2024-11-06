@@ -35,7 +35,7 @@
             <v-btn icon small title="Editar" color="primary" @click="nvoEditarPost(item)">
               <v-icon small>fa-solid fa-pen</v-icon>
             </v-btn>
-            <v-btn icon small title="Eliminar" color="error" @click="eliminarPost(item)">
+            <v-btn icon small title="Eliminar" color="error" @click="eliminarConfirmar(item)">
               <v-icon small>fa-solid fa-trash</v-icon>
             </v-btn>
           </template>
@@ -47,12 +47,20 @@
       :datos="objModal"
       @actualizar="controlarItem"
     />
+    <ModalConfirmar
+      v-model="activarConfimar"
+      :text="textoConfirmar"
+      :colorIcon="colorIconConfirmar"
+      :icon="iconConfirmar"
+      @confirmar="eliminarPost"
+    />
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 import ModalNvoEditar from '@/components/crud/ModalNvoEditar.vue';
+import ModalConfirmar from '@/components/generales/ModalConfirmar.vue';
 
 export default{
   name: 'Crud',
@@ -80,6 +88,11 @@ export default{
           status: null
         }
       },
+      activarConfimar: false,
+      textoConfirmar: '',
+      colorIconConfirmar: '',
+      iconConfirmar: '',
+      obj: {},
     }
   },
   created(){
@@ -153,12 +166,41 @@ export default{
         this.entradas[pos].content = this.limpiaEntrada(item.content.rendered);
       }
     },
-    async eliminarPost(item){
-      console.log("item borrar: ", item)
+    eliminarConfirmar(item){
+      this.activarConfimar    = true;
+      this.textoConfirmar     = 'Desea eliminar el post seleccionado?';
+      this.colorIconConfirmar = 'warning';
+      this.iconConfirmar      = 'fa-solid fa-circle-question';
+      this.obj                = JSON.parse(JSON.stringify(item));
+    },
+    async eliminarPost(){
+      try {
+        this.activarConfimar = false;
+        this.load = true;
+        const res = await this.axios.delete(`wp/v2/posts/${this.obj.id}`,{
+          headers:{
+            'Authorization': 'Bearer'+this.$store.state.token
+          }
+        });
+        this.load = false;
+        
+        let pos = this.entradas.map(e => e.id).indexOf(this.obj.id);
+        if(pos != -1){
+          this.entradas.splice(pos,1)
+        }
+
+        this.$store.state.objSnackBar.mensaje = 'Post eliminado correctamente.';
+        this.$store.state.objSnackBar.color   = 'green';
+        this.$store.state.objSnackBar.activo  = true;
+      } catch (error) {
+        this.$store.state.objSnackBar.mensaje = 'Ocurrió un error al intentar eliminar el post.';
+        this.$store.state.objSnackBar.color   = 'red';
+        this.$store.state.objSnackBar.activo  = true;
+      }
     },
   },
   components:{
-    ModalNvoEditar
+    ModalNvoEditar, ModalConfirmar
   }
 }
 </script>
