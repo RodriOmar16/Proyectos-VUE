@@ -1,0 +1,72 @@
+1 - pokemons
+CREATE TABLE pokemons (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    height INT,
+    weight INT,
+    base_experience INT,
+    sprite_front_default VARCHAR(255),
+    sprite_back_default VARCHAR(255)
+);
+
+2. types: 
+CREATE TABLE types (
+    id SERIAL PRIMARY KEY,
+    type_name VARCHAR(50) UNIQUE NOT NULL
+);
+
+3. pokemon_types:
+CREATE TABLE pokemon_types (
+    pokemon_id INT REFERENCES pokemons(id) ON DELETE CASCADE,
+    type_id INT REFERENCES types(id) ON DELETE CASCADE,
+    PRIMARY KEY (pokemon_id, type_id)
+);
+
+4. stats: 
+CREATE TABLE stats (
+    id SERIAL PRIMARY KEY,
+    pokemon_id INT REFERENCES pokemons(id) ON DELETE CASCADE,
+    stat_name VARCHAR(50),
+    base_stat INT
+);
+
+5. abilities
+CREATE TABLE abilities (
+    id SERIAL PRIMARY KEY,
+    ability_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+6. pokemon_abilities:
+CREATE TABLE pokemon_abilities (
+    pokemon_id INT REFERENCES pokemons(id) ON DELETE CASCADE,
+    ability_id INT REFERENCES abilities(id) ON DELETE CASCADE,
+    PRIMARY KEY (pokemon_id, ability_id)
+);
+
+7. moves: CREATE TABLE moves (
+    id SERIAL PRIMARY KEY,
+    move_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+8. pokemon_moves:
+CREATE TABLE pokemon_moves (
+    pokemon_id INT REFERENCES pokemons(id) ON DELETE CASCADE,
+    move_id INT REFERENCES moves(id) ON DELETE CASCADE,
+    level_learned INT,  -- Nivel en el que el Pokémon aprende el movimiento (si aplica)
+    PRIMARY KEY (pokemon_id, move_id)
+);
+
+9. sprites: 
+CREATE TABLE sprites (
+    id SERIAL PRIMARY KEY,
+    pokemon_id INT REFERENCES pokemons(id) ON DELETE CASCADE,
+    sprite_front_default VARCHAR(255),
+    sprite_back_default VARCHAR(255)
+);
+
+Relación entre las tablas:
+1- Pokémon y Tipos: La tabla pokemon_types crea una relación de muchos a muchos entre los Pokémon y los tipos que pueden tener.
+2- Pokémon y Estadísticas: La tabla stats almacena las estadísticas de cada Pokémon, donde cada entrada corresponde a una estadística como ataque, defensa, velocidad, etc.
+3- Pokémon y Habilidades: Los Pokémon pueden tener múltiples habilidades, y la tabla pokemon_abilities maneja esta relación.
+4- Pokémon y Movimientos: Los Pokémon pueden aprender muchos movimientos, por lo que la tabla pokemon_moves maneja esa relación, indicando el nivel en que aprenden el movimiento.
+5- Pokémon y Imágenes: La tabla sprites almacena las URL de las imágenes relacionadas con los Pokémon, como las vistas frontal y trasera.
