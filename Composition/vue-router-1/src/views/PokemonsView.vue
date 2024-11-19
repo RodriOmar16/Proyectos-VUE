@@ -43,6 +43,7 @@
           </div>
         </v-col>
       </v-row>
+      {{  }}
     </v-card-text>
   </v-card>
 </template>
@@ -50,21 +51,23 @@
 <script setup>
   //imports
   import { ref } from 'vue';
-  import { RouterLink, useRoute, useRouter } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import { useGetData } from '../composables/getData.js'
   import { useTiendaStore, useFavoritosStore } from '@/store/tienda.js';
 
   //data
-  const { data, loading, errorMsj,  getData }               = useGetData();
-  const url                                                 = ref('https://pokeapi.co/api/v2/pokemon');
-  const { guardarLink }                                     = useTiendaStore();
-  const route                                               = useRoute();
-  const router                                              = useRouter();
-  const useFavoritos                                        = useFavoritosStore();
-  const { agregarFavorito, quitarFavorito, buscarFavorito } = useFavoritosStore();
+  const { data, loading, errorMsj,  getData } = useGetData();
+  const url                                   = ref('https://pokeapi.co/api/v2/pokemon');
+  const { guardarLink }                       = useTiendaStore();
+  const route                                 = useRoute();
+  const router                                = useRouter();
+  const useFavoritos                          = useFavoritosStore();
+  const { agregarFavorito, quitarFavorito, 
+          buscarFavorito, getFavoritos }      = useFavoritosStore();
   
   //created
   getData(url.value);
+  getFavoritos();
   
   //methods
   const previous = (data) => {

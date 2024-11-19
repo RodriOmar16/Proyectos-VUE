@@ -49,10 +49,11 @@
   const router = useRouter();
   const { guardarLink } = useTiendaStore();
   const useFavoritos = useFavoritosStore();
-  const { agregarFavorito, quitarFavorito }   = useFavoritosStore();
+  const { getFavoritos, quitarFavorito,  }   = useFavoritosStore();
 
   //created
-  
+  getFavoritos();
+
   //methods
   const ver = (item) => {
     guardarLink('pokemons-favoritos');

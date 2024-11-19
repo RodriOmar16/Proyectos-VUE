@@ -19,7 +19,8 @@ export const useFavoritosStore = defineStore('favoritosStore', () => {
   const agregarFavorito = (item) => { 
     let pos = favoritos.value.map(e => e.name).indexOf(item.name)
     if(pos == -1){
-      favoritos.value.push(item); 
+      favoritos.value.push(item);
+      localStorage.setItem('favoritos', JSON.stringify( favoritos.value));
     }else console.log("Ya existe en la lista")
   };  
 
@@ -27,6 +28,7 @@ export const useFavoritosStore = defineStore('favoritosStore', () => {
     let pos = favoritos.value.map(e => e.name).indexOf(item.name)
     if(pos != -1){
       favoritos.value.splice(pos,1)
+      localStorage.setItem('favoritos', JSON.stringify( favoritos.value));
     }else console.log("Error, el pokemon no está en favoritos")
   }
 
@@ -34,7 +36,11 @@ export const useFavoritosStore = defineStore('favoritosStore', () => {
     return favoritos.value.map(e => e.name).indexOf(busItem.name)
   }
 
+  const getFavoritos = () =>{
+    favoritos.value = JSON.parse(localStorage.getItem('favoritos'))
+  }
+
   return{
-    favoritos, agregarFavorito, quitarFavorito, buscarFavorito
+    favoritos, agregarFavorito, quitarFavorito, buscarFavorito, getFavoritos
   }
 });
