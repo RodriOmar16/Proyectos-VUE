@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto"
+    class="container mt-4"
     width="700"
   >
     <v-card-title>
@@ -22,9 +22,16 @@
           <div v-else>
             <v-list v-if="data && !errorMsj" class="">
               <v-list-item v-for="(item) in data.results" :key="item.url" class="border cebra">
-                <RouterLink :to="`pokemons/${item.name}`" class="text-decoration-none text-dark">
-                  {{ item.name }}
-                </RouterLink>
+                <div class=" d-flex justify-content-between align-center">
+                  <p class="ma-0 pa-0">{{ item.name }}</p>
+                  <div>
+                    <v-icon class="ml-2" color="primary" size="small" title="Ver"@click="ver(item)">fa-solid fa-eye</v-icon>
+                    <v-icon v-if="buscarFavorito(item) == -1"
+                      class="ml-2" color="error" size="small" title="Marcar como favorito" @click="agregarFavorito(item)">fa-solid fa-heart</v-icon>
+                    <v-icon v-else
+                      class="ml-2" color="orange" size="small" title="Desmarcar" @click="quitarFavorito(item)">fa-solid fa-heart-circle-xmark</v-icon>
+                  </div>
+                </div>
               </v-list-item>
             </v-list>
             <v-alert  v-if="!data && errorMsj"
@@ -43,12 +50,18 @@
 <script setup>
   //imports
   import { ref } from 'vue';
-  import {RouterLink} from 'vue-router';
+  import { RouterLink, useRoute, useRouter } from 'vue-router';
   import { useGetData } from '../composables/getData.js'
+  import { useTiendaStore, useFavoritosStore } from '@/store/tienda.js';
 
   //data
-  const { data, loading, errorMsj,  getData } = useGetData();
-  const url = ref('https://pokeapi.co/api/v2/pokemon');
+  const { data, loading, errorMsj,  getData }               = useGetData();
+  const url                                                 = ref('https://pokeapi.co/api/v2/pokemon');
+  const { guardarLink }                                     = useTiendaStore();
+  const route                                               = useRoute();
+  const router                                              = useRouter();
+  const useFavoritos                                        = useFavoritosStore();
+  const { agregarFavorito, quitarFavorito, buscarFavorito } = useFavoritosStore();
   
   //created
   getData(url.value);
@@ -61,9 +74,11 @@
   const next = (data) => {
     url.value = data.next
     getData(url.value);
-  }
-
-
+  };
+  const ver = (item) => {
+    guardarLink('pokemons');
+    router.push(`/pokemons/${item.name}`)
+  };
 
   //computeds
 

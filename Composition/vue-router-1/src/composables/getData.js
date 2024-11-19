@@ -3,9 +3,9 @@ import { ref } from 'vue';
 
 export const useGetData = () => {
   //data
-  const data    = ref(null);
-  const loading = ref(true);
-  const errorMsj   = ref(null);
+  const data     = ref(null);
+  const loading  = ref(true);
+  const errorMsj = ref(null);
 
   const getData = async (url) => {
     try {
@@ -21,6 +21,6 @@ export const useGetData = () => {
 
   return {
     getData,
-    data, loading, errorMsj 
+    data, loading, errorMsj
   }
 }
