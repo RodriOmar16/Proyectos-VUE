@@ -3,12 +3,17 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
   state: () => {
     return { 
-      useData: 'Bluuweb@test.com'
+      username: 'RodriOmar16'
+    }
+  },
+  getters:{
+    minuscula(state){
+      return state.username.toLowerCase();
     }
   },
   actions: {
-    increment() {
-      this.count++
-    },
+    register(name){
+      this.username = name;
+    }
   },
 })
