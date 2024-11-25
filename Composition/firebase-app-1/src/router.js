@@ -7,18 +7,14 @@ const routes = [
     component:  Home,
   },
   {
-    path: '/login',
-    component:  () => import("./views/Login.vue"),
-  },
-  {
-    path: '/register',
-    component:  () => import("./views/Register.vue"),
+    path: '/login-register',
+    component:  () => import("./views/LoginRegister.vue"),
   }
 ];
 
 const router = createRouter({
   routes,
   history: createWebHistory()
-});
+}); 
 
 export default router;
