@@ -9,7 +9,12 @@ export const useUserStore = defineStore('user', {
       user: null,
       msjError: '',
       conectado: false,
-      dialogSnackBar: false,
+      dialogLoading: false,
+      snackBar: {
+        activo: false,
+        message: '',
+        color: ''
+      }
     }
   },
   getters:{
@@ -19,6 +24,7 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async registerUser(email, pass, name, dni, telefono){
+      this.dialogLoading = true;
       try {
         const userPeticion = await createUserWithEmailAndPassword(auth, email, pass);
         if(userPeticion){
@@ -40,10 +46,15 @@ export const useUserStore = defineStore('user', {
       } catch (error) {
         console.log("Error: ", error)
         this.msjError = error.message == 'Firebase: Error (auth/email-already-in-use).' ? 'El usuario ingresado ya existe en el sistema.' : error.message;
+        this.snackBar.message = error.message;
+        this.snackBar.color = 'red';
+        this.snackBar.activo = true;
+      }finally {
+        this.dialogLoading = false;
       }
     },
     async loginUser(email, pass){
-      this.dialogSnackBar = true;
+      this.dialogLoading = true;
       try {
         const res = await signInWithEmailAndPassword(auth, email, pass)
         if(res){
@@ -57,9 +68,9 @@ export const useUserStore = defineStore('user', {
         }
       } catch (error) {
         console.log("Error: ", error)
-        this.msjError = error.message == 'Firebase: Error (auth/invalid-credential).' ? 'El usuario o la contraseña no válidos.' : error.message;
+        this.msjError = error.message == 'Firebase: Error (auth/invalid-credential).' ? 'El email o la contraseña no válidos.' : error.message;
       } finally {
-        this.dialogSnackBar = false;
+        this.dialogLoading = false;
       }
     },
     async logout() {

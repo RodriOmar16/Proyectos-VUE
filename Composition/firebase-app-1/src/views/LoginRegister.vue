@@ -90,7 +90,6 @@
         {{ userStore.msjError }}
       </div>
     </div>
-    {{ userStore.user }}
   </form>
 </template>
 

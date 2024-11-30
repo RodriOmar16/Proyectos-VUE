@@ -1,25 +1,30 @@
 <template>
 
   <div>
-    <nav class="navbar bg-primary px-4 d-flex justify-content-between" data-bs-theme="dark">
+    <nav class="navbar bg-primary px-4 d-flex " :class="route.path == '/' ? 'justify-content-between' : 'justify-content-center'" data-bs-theme="dark">
       <RouterLink class="text-decoration-none" to="/" v-if="userStore.user">
         <img src="./assets/vue.svg" alt="">
         <span class="ml-2 text-white">Logo</span>
       </RouterLink>
-      <div class="d-flex justify-content-around">
-        <RouterLink class="btn btn-secondary" to="/" v-if="userStore.user">Home</RouterLink>
-        <RouterLink class="btn btn-secondary mx-2" to="/login-register" v-if="!userStore.user">Conectarse</RouterLink>
+      <div class="d-flex justify-content-center">
+        <RouterLink class="text-white text-decoration-none" to="/" v-if="userStore.user">Home</RouterLink>
+        <RouterLink class="text-white text-decoration-none" to="/login-register" v-if="!userStore.user">Conectarse</RouterLink>
       </div>
       <div v-if="userStore.user">
-        <span>
-          Bienvenido {{ userStore.user.name }}
-        </span>
-        <button class="btn btn-secondary" @click="cerrarSesion()">Logout</button>
+        <span class="mr-2">Bienvenido, <strong>{{ userStore.user.name }}</strong></span>
+        <v-icon color="cyan" title="Cerrar sesión" @click="cerrarSesion()" size="small">fa-solid fa-right-from-bracket</v-icon> 
       </div>
     </nav>
-    <SnackBar
-        v-model="userStore.dialogSnackBar"
-      />
+    <LoadingModal
+      v-model="userStore.dialogLoading"
+    />
+
+    <SnackBarModal
+      v-model="userStore.snackBar.activo"
+      :color="userStore.snackBar.color"
+      :mensaje="userStore.snackBar.message"
+    />
+
     <main class="container">
       <RouterView></RouterView>
     </main>
@@ -30,11 +35,13 @@
 <script setup>
   import { useUserStore } from './stores/user';
   import { RouterLink } from 'vue-router';
-  import { useRouter } from 'vue-router';
-  import SnackBar from './components/generales/SnackBar.vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import LoadingModal from './components/generales/LoadingModal.vue';
+  import SnackBarModal from './components/generales/SnackBarModal.vue';
   
   const userStore = useUserStore();
   const router    = useRouter();
+  const route     = useRoute();
 
   if(!userStore.user){
     router.push('/login-register');

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="snackbar" width="500" :persistent="snackbar"> 
+  <v-dialog v-model="loading" width="500" :persistent="loading"> 
     <div class="bg-primary ma-3 pa-3">
       <span>{{ mensaje }}</span>
       <v-progress-linear
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name:'SnackBar',
+  name:'LoadingModal',
   props:{
     value: Boolean, 
     mensaje: {
@@ -21,11 +21,11 @@ export default {
     },
     color:{
       type: String,
-      default: 'primary'
+      default: 'info'
     }
   },
   computed:{
-    snackbar:{
+    loading:{
       get(){
         return this.value;
       },
@@ -40,7 +40,7 @@ export default {
     }
   },
   watch:{
-    snackbar: function(val){
+    loading: function(val){
       this.activar = val
     }
   }
